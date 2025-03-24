@@ -66,7 +66,7 @@ Supports glob patterns including double-star patterns (e.g., "**/*.md") to find 
 			defer f.Close()
 
 			// Add dashed line before file if requested
-			if useDashes && !showFileName {
+			if useDashes {
 				// Ensure we're on a new line before printing dashes
 				fmt.Println()
 				fmt.Println(strings.Repeat("-", 80))
@@ -95,10 +95,8 @@ Supports glob patterns including double-star patterns (e.g., "**/*.md") to find 
 				}
 				fmt.Println()
 
-				// Add dashed line after filename if both --show-filename and --show-dashes are enabled
-				if useDashes {
-					fmt.Println(strings.Repeat("-", 80))
-				}
+				// Add blank line after filename
+				fmt.Println()
 			}
 
 			// Add content prefix if specified
