@@ -24,10 +24,18 @@ var (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:     "llmcat",
-	Short:   "A CLI utility for combining files for LLM input",
-	Long:    `A CLI utility that concatenates files with customizable formatting options, suitable for use as input to Large Language Models.`,
-	Version: version,
+	Use:   "llmcat",
+	Short: "A CLI utility for combining files for LLM input",
+	Long:  `A CLI utility that concatenates files with customizable formatting options, suitable for use as input to Large Language Models.`,
+}
+
+// versionCmd represents the version command
+var versionCmd = &cobra.Command{
+	Use:   "version",
+	Short: "Print the version number",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(version)
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -46,6 +54,9 @@ func init() {
 		version = "(unknown)"
 	}
 
+	// Add version command
+	rootCmd.AddCommand(versionCmd)
+
 	// Define global flags
 	rootCmd.PersistentFlags().BoolVar(&showFileName, "show-filename", false, "Show file name before content")
 	rootCmd.PersistentFlags().BoolVar(&useDashes, "show-dashes", false, "Add dashed lines before and after each file")
@@ -54,10 +65,6 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&fileNamePrefix, "filename-prefix", "", "Text to print before file name")
 	rootCmd.PersistentFlags().StringVar(&fileNameSuffix, "filename-suffix", "", "Text to print after file name")
 	rootCmd.PersistentFlags().BoolVar(&debugMode, "debug", false, "Enable verbose debug output")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 // checkFileExists checks if a file exists and is not a directory
