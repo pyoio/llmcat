@@ -13,51 +13,63 @@ go install github.com/pyoio/llmcat@latest
 The basic usage is:
 
 ```bash
-llmcat cat file1.txt file2.txt file3.txt
+llmcat cat <base-dir> [glob-patterns...]
 ```
 
 ### Options
 
-- `-f, --show-filename`: Show file name before content
-- `-d, --dashes`: Add dashed lines before and after each file
+- `--show-filename`: Show file name before content
+- `--show-dashes`: Add dashed lines before and after each file
 - `--content-prefix`: Text to print before file contents
 - `--content-suffix`: Text to print after file contents
 - `--filename-prefix`: Text to print before file name
 - `--filename-suffix`: Text to print after file name
-- `-b, --base-dir`: Base directory for file search (default: ".")
+- `--debug`: Enable verbose debug output showing pattern resolution
+
+### Path Support
+
+The tool supports special characters in paths:
+- `~` expands to the user's home directory
+- Environment variables are expanded (e.g., `$HOME`, `$USER`)
 
 ### Examples
 
 ```bash
-# Basic usage
-llmcat cat file1.txt file2.txt
+# Basic usage with a directory and glob pattern
+llmcat cat . "*.txt"
 
 # Show file names
-llmcat cat -f file1.txt file2.txt
+llmcat cat --show-filename /path/to/project "**/*.go"
 
 # Add dashed lines around files
-llmcat cat -d file1.txt file2.txt
+llmcat cat --show-dashes ~/Documents "**/*.md"
 
 # Custom file name formatting
-llmcat cat -f --filename-prefix "File: " --filename-suffix ":" file1.txt file2.txt
+llmcat cat --show-filename --filename-prefix "File: " --filename-suffix ":" /path/to/project "**/*.txt"
 
 # Custom content formatting
-llmcat cat --content-prefix "Content starts here:\n" --content-suffix "\nContent ends here" file1.txt file2.txt
+llmcat cat --content-prefix "Content starts here:\n" --content-suffix "\nContent ends here" . "**/*.md"
 
 # Combine multiple options
-llmcat cat -f -d --filename-prefix "File: " --content-prefix "Content:\n" file1.txt file2.txt
+llmcat cat --show-filename --show-dashes --filename-prefix "File: " --content-prefix "Content:\n" /path/to/project "**/*.go"
 
-# Find all markdown files recursively
-llmcat cat "**/*.md"
+# Find all markdown files recursively in a directory
+llmcat cat /path/to/project "**/*.md"
 
-# Find all Go files in a specific directory
-llmcat cat -b /path/to/project "**/*.go"
+# Multiple glob patterns in a directory
+llmcat cat /path/to/project "**/*.md" "**/*.txt"
 
-# Multiple glob patterns
-llmcat cat "**/*.md" "**/*.txt"
+# Using home directory
+llmcat cat ~/Documents "**/*.md"
+
+# Using environment variables
+llmcat cat "$HOME/Documents" "**/*.md"
 
 # Recursive with custom formatting
-llmcat cat -f -d --filename-prefix "File: " "**/*.md"
+llmcat cat --show-filename --show-dashes --filename-prefix "File: " /path/to/project "**/*.md"
+
+# Debug output to see pattern resolution
+llmcat cat --debug /path/to/project "**/*.go" "*.md"
 ```
 
 ## License
